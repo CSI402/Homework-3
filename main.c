@@ -39,6 +39,22 @@ int main(int argc, char *argv[]){
       return 1;            //close program
     }
   }
+  
+    //if there is one argument
+  if (argc == 2){
+    if(!strchr(argv[1], '.')){ //if there is no file extension on file
+      dir = opendir(argv[1]);  //open directory
+      if (dir == NULL){ //check if file opened
+        fprintf(stderr, "Error, directory could not be opened.");
+        return 1;
+      }
+      //pass opened directory to propery
+    }
+    else{
+      //pass file for reading and inserting into linked list
+    }
+  }
+
 
   closedir(dir);        //close directory at end of program
   return 0;
