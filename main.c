@@ -67,6 +67,6 @@ int main(int argc, char *argv[]){
     }
   }
 
-  closedir(dir);        //close directory at end of program
+  closedir(dir);         //close directory at end of program
   return 0;
 }
