@@ -7,6 +7,8 @@ Jessica Kanczura jKanczura@albany.edu : Monitor
 #include <stdio.h>
 #include <stdlib.h>
 #include <dirent.h>
+#include <string.h>
+#include "prototypes.h"
 
 //Function to browse through directories one at a time, checking for subdirectories with recursion
 void browseDirectories(char* directoryName){
