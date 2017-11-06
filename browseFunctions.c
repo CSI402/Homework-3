@@ -12,7 +12,7 @@ Jessica Kanczura jKanczura@albany.edu : Monitor
 
 //Function to browse through directories one at a time, checking for subdirectories with recursion
 void browseDirectories(char* directoryName){
- //Declare the dir variable
+ //Declare a DIR pointer variable
   DIR *dir;
 
   //If given directory cannot be opened, print error message and stop
