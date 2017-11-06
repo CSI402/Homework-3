@@ -7,66 +7,77 @@ Jessica Kanczura jKanczura@albany.edu : Monitor
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <unistd.h> //used for getcwd command
-#include <dirent.h> //used to access parts of directory
 #include "prototypes.h"
+#include <unistd.h> //used for getcwd command
 
-//Structure for the mapping of the word->fileNames
+//Structure for the mapping of the word->filenames
 typedef struct node{
   char *word;
   struct node *next;
 } node_t, *pnode_t;
 
+
 int main(int argc, char *argv[]){
 
-  char directoryName[100];  //used to store directory name 
-  DIR *dir;                 //pointer to opened directory
+  char directoryName[1024];
 
   //If there are an invalid number of commands, print error and stop
   if (argc > 3){
-    fprintf(stderr, "Error: Invalid number of arguments\n" );
+    fprintf(stderr, "Error: Invalid number of arguments.\n" );
     return 0;
   }
-   //if there are no arguments
+
+  //If there are no arguments, work on current directory and generate the file "invind.txt"
   if (argc == 1){
-    if(getcwd(directoryName, sizeof(directoryName))==NULL){             //get current working directory and verify it was received 
-      fprintf(stderr, "Error, current working directory cannot be accessed.");   //if not received, print error
-      return 1;         //close program
+
+    //If current working directory cannot be received, print error and stop
+    if(getcwd(directoryName, sizeof(directoryName))==NULL){
+      fprintf(stderr, "Error: Current working directory cannot be accessed.\n");
+      return 0;
     }
-    dir = opendir(directoryName);         //open current working directory
-    if (dir == NULL){                     //verify opened
-      fprintf(stderr, "Error, directory could not be opened.");     //if not opened, print error
-      return 1;            //close program
-    }
+
+    browseDirectories(directoryName);
   }
-  
-    //if there is one argument
-  if (argc == 2){
-    if(!strchr(argv[1], '.')){ //if there is no file extension on file
-      dir = opendir(argv[1]);  //open directory
-      if (dir == NULL){ //check if file opened
-        fprintf(stderr, "Error, directory could not be opened.");
-        return 1;
-      }
-      //pass opened directory to propery
+
+  //If there is one argument, work on given directory and generate the file "invind.txt"
+  else if(argc == 2){
+
+    //If there is no file extension, it is a directory
+    if(strchr(argv[1], '.') == NULL){
+      browseDirectories(argv[1]);
     }
+    //Otherwise, print error and stop
     else{
-      //pass file for reading and inserting into linked list
+      fprintf(stderr, "Error: Argument is not a directory.\n");
+      return 0;
     }
   }
 
- //If there are two arguments, work on given directory/file and generate given fileName
+  //If there are two arguments, work on given directory/file and generate given fileName
   else if(argc == 3){
 
     //If the second argument is a directory
     if(strchr(argv[2], '.') == NULL){
-      //////CALL BROWSEDIRECTORY WITH argv[2]
+      browseDirectories(argv[2]);
     }
+//Otherwise, print error and stop
     else{
-      /////CALL BROWSEFILE WITH argv[2]
+      fprintf(stderr, "Error: Argument is not a directory.\n");
+      return 0;
     }
   }
 
-  closedir(dir);         //close directory at end of program
+  //If there are two arguments, work on given directory/file and generate given fileName
+  else if(argc == 3){
+
+    //If the second argument is a directory
+    if(strchr(argv[2], '.') == NULL){
+      browseDirectories(argv[2]);
+    }
+    else{
+      browseFile(argv[2]);
+    }
+  }
+
   return 0;
 }
