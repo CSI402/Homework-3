@@ -18,5 +18,10 @@ void browseFile(char* fileName){
 
 }
 
-
-
+/*
+dir = opendir(directoryName);         //open current working directory
+    if (dir == NULL){                     //verify opened
+      fprintf(stderr, "Error, directory could not be opened.");     //if not opened, print error
+      return 1;            //close program
+    }
+*/
