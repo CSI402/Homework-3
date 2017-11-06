@@ -11,5 +11,11 @@ Jessica Kanczura jKanczura@albany.edu : Monitor
 
 int main(void){
 
+   //If there are an invalid number of commands, print error and stop
+  if (argc > 3){
+    fprintf(stderr, "Error: Invalid number of arguments\n" );
+    return 0;
+  }
+
 }
 
