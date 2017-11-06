@@ -7,14 +7,14 @@ Jessica Kanczura jKanczura@albany.edu : Monitor
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include <dirent.h>
+#include <unistd.h> //used for getcwd command
+#include <dirent.h> //used to access parts of directory
 #include "prototypes.h"
 
 int main(int argc, char *argv[]){
 
-  char directoryName[100];
-  DIR *dir;
+  char directoryName[100];  //used to store directory name 
+  DIR *dir;                 //pointer to opened directory
 
   //If there are an invalid number of commands, print error and stop
   if (argc > 3){
