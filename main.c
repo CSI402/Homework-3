@@ -11,6 +11,12 @@ Jessica Kanczura jKanczura@albany.edu : Monitor
 #include <dirent.h> //used to access parts of directory
 #include "prototypes.h"
 
+//Structure for the mapping of the word->fileNames
+typedef struct node{
+  char *word;
+  struct node *next;
+} node_t, *pnode_t;
+
 int main(int argc, char *argv[]){
 
   char directoryName[100];  //used to store directory name 
