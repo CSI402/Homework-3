@@ -55,6 +55,17 @@ int main(int argc, char *argv[]){
     }
   }
 
+ //If there are two arguments, work on given directory/file and generate given fileName
+  else if(argc == 3){
+
+    //If the second argument is a directory
+    if(strchr(argv[2], '.') == NULL){
+      //////CALL BROWSEDIRECTORY WITH argv[2]
+    }
+    else{
+      /////CALL BROWSEFILE WITH argv[2]
+    }
+  }
 
   closedir(dir);        //close directory at end of program
   return 0;
