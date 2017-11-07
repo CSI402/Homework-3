@@ -13,6 +13,7 @@ Jessica Kanczura jKanczura@albany.edu : Monitor
 
 int main(int argc, char *argv[]){
 
+  //Delcare char array to hold directory name
   char directoryName[1024];
 
   //If there are an invalid number of commands, print error and stop
@@ -30,7 +31,7 @@ int main(int argc, char *argv[]){
       return 0;
     }
 
-    browseDirectories(directoryName);
+    browseDirectories(directoryName, "invind.txt");
   }
 
   //If there is one argument, work on given directory and generate the file "invind.txt"
@@ -38,7 +39,7 @@ int main(int argc, char *argv[]){
 
     //If there is no file extension, it is a directory
     if(strchr(argv[1], '.') == NULL){
-      browseDirectories(argv[1]);
+      browseDirectories(argv[1], "invind.txt");
     }
     //Otherwise, print error and stop
     else{
@@ -50,26 +51,19 @@ int main(int argc, char *argv[]){
   //If there are two arguments, work on given directory/file and generate given fileName
   else if(argc == 3){
 
-    //If the second argument is a directory
-    if(strchr(argv[2], '.') == NULL){
-      browseDirectories(argv[2]);
-    }
-//Otherwise, print error and stop
-    else{
-      fprintf(stderr, "Error: Argument is not a directory.\n");
+    //If the first argument is not a file, print error and stop
+    if(strchr(argv[1], '.') == NULL){
+      fprintf(stderr, "Error: First argument is not a file type.\n");
       return 0;
     }
-  }
-
-  //If there are two arguments, work on given directory/file and generate given fileName
-  else if(argc == 3){
-
-    //If the second argument is a directory
+    
+    //If the second argument is a directory, browse it
     if(strchr(argv[2], '.') == NULL){
-      browseDirectories(argv[2]);
+      browseDirectories(argv[2] argv[1]);
     }
+    //Otherwise, browse the file
     else{
-      browseFile(argv[2]);
+      browseFile(argv[2], argv[1]);
     }
   }
 
