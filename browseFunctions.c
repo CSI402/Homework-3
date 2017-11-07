@@ -9,6 +9,7 @@ Jessica Kanczura jKanczura@albany.edu : Monitor
 #include <ctype.h>
 #include <dirent.h>
 #include <string.h>
+#include "constants.h"
 #include "prototypes.h"
 #include "struct_def.h"
 #include "externs.h"
@@ -61,25 +62,26 @@ void browseFile(char* fileName){
   int c;
   //Declare char pointer to represent each word
   char *w = malloc(sizeof(char *));
-  //Declare a conditional int, 0 if within word of non-alphanumeric, 1 otherwise
-  int inWord = 0;
-//Loop through all the characters in the file, one by one
+  //Declare a conditional int, TRUE if within word of alphanumeric, FALSE otherwise
+  int inWord = FALSE;
+
+  //Loop through all the characters in the file, one by one
   while((c = fgetc(fp)) != EOF){
 
     //If the character is an alphabet or a digit, append it to the temp char pointer
     if (!(isalpha(c) == 0) || !(isdigit(c) == 0)){
-      inWord = 1;
+      inWord = TRUE;
       append(w, c);
     }
     //Otherwise, reset the char pointer to be empty
     else{
       //If word just ended
-      if (inWord == 1){
-        //Reset inWord to be 0
-        inWord = 0;
+      if (inWord){
+        //Reset inWord to be false
+        inWord = FALSE;
 
         //Take the word and add it to the list with the filename, unless the word already exists in the list then just add the filename to the end of that list
-        ///THIS PART IS NOT COMPLETE, WE DON'T ACTUALLY ADD THE WORD YET I DIDN'T HAVE TIME BUT I KNOW HOW TO DO IT
+        ///ADD THIS CODE NEXT THEN YOU'RE BASICALLY DONE
       }
       strcpy(w, "");
     }
