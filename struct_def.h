@@ -11,13 +11,13 @@ typedef struct files{
   char *fileName;
   int count;
   struct files *nextFile;
-} files_t;
+} *pfile_t;
 
 
 //Structure for the mapping of the word, filename, count (frequency of word in file)
 typedef struct node{
   char *word;
-  files_t *firstFile;
+  pfile_t firstFile;
   struct node *next;
 } *pnode_t;
 
