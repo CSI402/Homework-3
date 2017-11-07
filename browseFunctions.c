@@ -66,15 +66,15 @@ void browseFile(char* fileName){
 
     //If the character is an alphabet or a digit, append it to the temp char pointer
     if (!(isalpha(c) == 0) || !(isdigit(c) == 0)){
-      beginning = 1;
+      inWord = 1;
       append(w, c);
     }
     //Otherwise, reset the char pointer to be empty
     else{
       //If word just ended
-      if (beginning == 1){
-        //Reset beginning to be 0
-        beginning = 0;
+      if (inWord == 1){
+        //Reset inWord to be 0
+        inWord = 0;
 
         //Take the word and add it to the list with the filename, unless the word already exists in the list then just add the filename to the end of that list
         ///THIS PART IS NOT COMPLETE, WE DON'T ACTUALLY ADD THE WORD YET I DIDN'T HAVE TIME BUT I KNOW HOW TO DO IT
