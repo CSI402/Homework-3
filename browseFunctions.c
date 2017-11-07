@@ -16,7 +16,7 @@ Jessica Kanczura jKanczura@albany.edu : Monitor
 void append(char *s, char c);
 
 //Function to browse through directories one at a time, checking for subdirectories with recursion
-void browseDirectories(char* directoryName, char *indexName){
+void browseDirectories(char* directoryName){
   //Declare a DIR pointer variable
   DIR *dir;
 
@@ -34,10 +34,10 @@ void browseDirectories(char* directoryName, char *indexName){
 
     //If there is no file extension, it is a directory (so call this method recursively)
     if (strchr(dentry->d_name, '.') == NULL)
-      browseDirectories(dentry->d_name, indexName);
+      browseDirectories(dentry->d_name);
     //Otherwise, call browseFile
     else
-      browseFile(dentry->d_name, indexName);
+      browseFile(dentry->d_name);
   }
 
 
@@ -46,7 +46,7 @@ void browseDirectories(char* directoryName, char *indexName){
 }
 
 //Function to browse through a file by separators (any non numerical/alphabetical char)
-void browseFile(char* fileName, char *indexName){
+void browseFile(char* fileName){
   //Declare a FILE pointer variable
   FILE *fp;
 
