@@ -7,15 +7,9 @@ Jessica Kanczura jKanczura@albany.edu : Monitor
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "prototypes.h"
 #include <unistd.h> //used for getcwd command
-
-//Structure for the mapping of the word->filenames
-typedef struct node{
-  char *word;
-  struct node *next;
-} node_t, *pnode_t;
-
+#include "prototypes.h"
+#include "struct_def.h"
 
 int main(int argc, char *argv[]){
 
