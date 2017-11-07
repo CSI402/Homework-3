@@ -10,6 +10,7 @@ Jessica Kanczura jKanczura@albany.edu : Monitor
 #include <dirent.h>
 #include <string.h>
 #include "prototypes.h"
+#include "struct_def.h"
 
 //Prototype for function append
 void append(char *s, char c);
