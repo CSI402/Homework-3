@@ -31,7 +31,7 @@ int main(int argc, char *argv[]){
       return 0;
     }
 
-    browseDirectories(directoryName, "invind.txt");
+    browseDirectories(directoryName);
   }
 
   //If there is one argument, work on given directory and generate the file "invind.txt"
@@ -39,7 +39,7 @@ int main(int argc, char *argv[]){
 
     //If there is no file extension, it is a directory
     if(strchr(argv[1], '.') == NULL){
-      browseDirectories(argv[1], "invind.txt");
+      browseDirectories(argv[1]);
     }
     //Otherwise, print error and stop
     else{
@@ -59,11 +59,11 @@ int main(int argc, char *argv[]){
     
     //If the second argument is a directory, browse it
     if(strchr(argv[2], '.') == NULL){
-      browseDirectories(argv[2] argv[1]);
+      browseDirectories(argv[2]);
     }
     //Otherwise, browse the file
     else{
-      browseFile(argv[2], argv[1]);
+      browseFile(argv[2]);
     }
   }
 
