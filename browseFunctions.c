@@ -11,6 +11,7 @@ Jessica Kanczura jKanczura@albany.edu : Monitor
 #include <string.h>
 #include "prototypes.h"
 #include "struct_def.h"
+#include "externs.h"
 
 //Prototype for function append
 void append(char *s, char c);
