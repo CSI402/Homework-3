@@ -10,6 +10,7 @@ Jessica Kanczura jKanczura@albany.edu : Monitor
 #include <unistd.h> //used for getcwd command
 #include "prototypes.h"
 #include "struct_def.h"
+#include "globals.h"
 
 int main(int argc, char *argv[]){
 
