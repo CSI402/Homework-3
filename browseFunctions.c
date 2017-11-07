@@ -53,10 +53,14 @@ void browseFile(char* fileName){
   FILE *fp;
 
   //If given file cannot be opened, print error message and stop
-  if((fp = fopen(fileName, "r"))== NULL){
+  if((fp = fopen(fileName, "a+"))== NULL){
     fprintf(stderr, "Error: File %s cannot be opened.\n", fileName);
     return;
   }
+
+  //Add a space to the end of the file, then rewind
+  fputs(" ", fp);
+  rewind(fp);
 
   //Declare int variables to represent each char in file
   int c;
@@ -68,20 +72,21 @@ void browseFile(char* fileName){
   //Loop through all the characters in the file, one by one
   while((c = fgetc(fp)) != EOF){
 
-    //If the character is an alphabet or a digit, append it to the temp char pointer
+    //If the character is an alphabet or a digit, append it to the word in lowercase
     if (!(isalpha(c) == 0) || !(isdigit(c) == 0)){
+      printf("%c", c);
       inWord = TRUE;
-      append(w, c);
+      append(w, tolower(c));
     }
     //Otherwise, reset the char pointer to be empty
     else{
       //If word just ended
       if (inWord){
+        printf("\n%s\n", w);
         //Reset inWord to be false
         inWord = FALSE;
 
-        //Take the word and add it to the list with the filename, unless the word already exists in the list then just add the filename to the end of that list
-        ///ADD THIS CODE NEXT THEN YOU'RE BASICALLY DONE
+        //Push the word to the linked list
       }
       strcpy(w, "");
     }
@@ -90,6 +95,8 @@ void browseFile(char* fileName){
   //Close the file
   fclose(fp);
 }
+
+
 
 ////////////////////////////////////////////
 //Taken from https://stackoverflow.com/questions/12939370/c-appending-char-to-char
