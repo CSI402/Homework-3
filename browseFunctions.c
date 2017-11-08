@@ -80,7 +80,7 @@ void browseFile(char* fileName){
   //Declare char pointer to represent each word
   char *w;
   //If malloc fails, stop
-  if((w = checkMalloc(sizeof(char *))) == NULL)
+  if((w = checkMalloc(sizeof(char))) == NULL)
     return;
   //Declare a conditional int, TRUE if within word of alphanumeric, FALSE otherwise
   int inWord = FALSE;
@@ -99,7 +99,7 @@ void browseFile(char* fileName){
       if (inWord){
         printf("---Word: %s\n", w);
         //Reset inWord to be false
- inWord = FALSE;
+        inWord = FALSE;
 
         //Push the word to the linked list with the fileName
         push(w, fileName);
@@ -128,12 +128,12 @@ void push(char *wd, char *fName){
       return;
 
     //Initialize the newNode to have the word
-    newNode->word = malloc(sizeof(char *)*strlen(wd));
+    newNode->word = malloc(sizeof(char)*strlen(wd));
     strcpy(newNode->word, wd);
     newNode->next = NULL;
 
     //Initialize the newFileNode to have fName and count = 1
-    newFileNode->fileName = malloc(sizeof(char *)*strlen(fName));
+    newFileNode->fileName = malloc(sizeof(char)*strlen(fName));
     strcpy(newFileNode->fileName, fName);
     newFileNode->count = 1;
     newFileNode->nextFile = NULL;
@@ -189,7 +189,7 @@ void push(char *wd, char *fName){
         return;
 
       //Initialize the newFileNode to have fName and count = 1
-      newFileNode->fileName = malloc(sizeof(char *)*strlen(fName));
+      newFileNode->fileName = malloc(sizeof(char)*strlen(fName));
       strcpy(newFileNode->fileName, fName);
       newFileNode->count = 1;
       newFileNode->nextFile = NULL;
@@ -217,12 +217,12 @@ void push(char *wd, char *fName){
     return;
 
   //Initialize the newNode to have the word
-  newNode->word = malloc(sizeof(char *)*strlen(wd));
+  newNode->word = malloc(sizeof(char)*strlen(wd));
   strcpy(newNode->word, wd);
   newNode->next = NULL;
 
    //Initialize the newFileNode to have fName and count = 1
-  newFileNode->fileName = malloc(sizeof(char *)*strlen(fName));
+  newFileNode->fileName = malloc(sizeof(char)*strlen(fName));
   strcpy(newFileNode->fileName, fName);
   newFileNode->count = 1;
   newFileNode->nextFile = NULL;
@@ -306,6 +306,13 @@ void freeMem(void *p){
 /////////////////////////////////////////////
 void append(char *s, char c){
   int len = strlen(s);
+  
+   s = realloc(s, sizeof(char)*(len+1));
+  if (s == NULL){
+    fprintf(stderr, "Error: Memory not allocated.\n");
+    return;
+  }
+  
   s[len] = c;
   s[len+1] = '\0';
 }
