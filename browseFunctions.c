@@ -184,7 +184,7 @@ if(strcmp(curr->word, wd) == 0){
         return;
 
       //Initialize the newFileNode to have fName and count = 1
-      newFileNode->fileName = malloc(sizeof(char *));
+      newFileNode->fileName = malloc(sizeof(char *)*strlen(fName));
       strcpy(newFileNode->fileName, fName);
       newFileNode->count = 1;
       newFileNode->nextFile = NULL;
@@ -201,6 +201,7 @@ if(strcmp(curr->word, wd) == 0){
   }
 
   //If the word doesn't exist through the entire list
+  
    //Declare newNode pointer and newFileNode pointer and check malloc
   pnode_t newNode;
   pfile_t newFileNode;
@@ -210,44 +211,12 @@ if(strcmp(curr->word, wd) == 0){
     return;
 
   //Initialize the newNode to have the word
-  newNode->word = malloc(sizeof(char *));
+  newNode->word = malloc(sizeof(char *)*strlen(wd));
   strcpy(newNode->word, wd);
   newNode->next = NULL;
 
-      //Initialize the newFileNode to have fName and count = 1
- newFileNode->fileName = malloc(sizeof(char *));
-      strcpy(newFileNode->fileName, fName);
-      newFileNode->count = 1;
-      newFileNode->nextFile = NULL;
-
-      //Set the end file to be the newFileNode
-      currFile = newFileNode;
-
-      //Stop
-      return;
-    }
-
-    //Go to the next node
-    curr = curr->next;
-  }
-
-  //If the word doesn't exist through the entire list
-
-  //Declare newNode pointer and newFileNode pointer and check malloc
-  pnode_t newNode;
-  pfile_t newFileNode;
-  if((newNode = checkMalloc(sizeof(pnode_t))) == NULL)
- return;
-  if((newFileNode = checkMalloc(sizeof(pfile_t))) == NULL)
-    return;
-
-  //Initialize the newNode to have the word
-  newNode->word = malloc(sizeof(char *));
-  strcpy(newNode->word, wd);
-  newNode->next = NULL;
-
-  //Initialize the newFileNode to have fName and count = 1
-  newFileNode->fileName = malloc(sizeof(char *));
+   //Initialize the newFileNode to have fName and count = 1
+  newFileNode->fileName = malloc(sizeof(char *)*strlen(fName));
   strcpy(newFileNode->fileName, fName);
   newFileNode->count = 1;
   newFileNode->nextFile = NULL;
@@ -258,6 +227,7 @@ if(strcmp(curr->word, wd) == 0){
 
   //Stop
   return;
+}
 
 //If the given file name already exists in the list, append an appropriate number to the end of the file name
 void changeFileName(char *fName){
