@@ -2,6 +2,8 @@
 Daniel Hug dhug@albany.edu: Leader
 Alana Ruth Aruth@albany.edu : Recorder
 Jessica Kanczura jKanczura@albany.edu : Monitor
+
+Main worker method, calls browse functions and index functions directly
 */
 
 #include <stdio.h>
@@ -16,6 +18,13 @@ int main(int argc, char *argv[]){
 
   //Delcare char array to hold directory name
   char directoryName[1024];
+
+  //Malloc memory for the head of the linked list
+  if((h = checkMalloc(sizeof(pnode_t))) == NULL)
+    return 0;
+
+  //Initialize the head of the linked list to be null
+  h = NULL;
 
   //If there are an invalid number of commands, print error and stop
   if (argc > 3){
@@ -33,6 +42,8 @@ int main(int argc, char *argv[]){
     }
 
     browseDirectories(directoryName);
+    //Generate index file
+    indexGenerator("invind.txt");
   }
 
   //If there is one argument, work on given directory and generate the file "invind.txt"
@@ -41,7 +52,10 @@ int main(int argc, char *argv[]){
     //If there is no file extension, it is a directory
     if(strchr(argv[1], '.') == NULL){
       browseDirectories(argv[1]);
+      //Generate index file
+      indexGenerator("invind.txt");
     }
+
     //Otherwise, print error and stop
     else{
       fprintf(stderr, "Error: Argument is not a directory.\n");
@@ -57,16 +71,21 @@ int main(int argc, char *argv[]){
       fprintf(stderr, "Error: First argument is not a file type.\n");
       return 0;
     }
-    
+
     //If the second argument is a directory, browse it
-    if(strchr(argv[2], '.') == NULL){
+    if(strchr(argv[2], '.') == NULL)
       browseDirectories(argv[2]);
-    }
+
     //Otherwise, browse the file
-    else{
+    else
       browseFile(argv[2]);
-    }
+
+    //Generate index file
+    indexGenerator(argv[1]);
   }
+
+  //Free the memory of h
+  freeMem(h);
 
   return 0;
 }
