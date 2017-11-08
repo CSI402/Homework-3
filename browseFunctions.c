@@ -201,6 +201,18 @@ if(strcmp(curr->word, wd) == 0){
   }
 
   //If the word doesn't exist through the entire list
+   //Declare newNode pointer and newFileNode pointer and check malloc
+  pnode_t newNode;
+  pfile_t newFileNode;
+  if((newNode = checkMalloc(sizeof(pnode_t))) == NULL)
+    return;
+  if((newFileNode = checkMalloc(sizeof(pfile_t))) == NULL)
+    return;
+
+  //Initialize the newNode to have the word
+  newNode->word = malloc(sizeof(char *));
+  strcpy(newNode->word, wd);
+  newNode->next = NULL;
 
       //Initialize the newFileNode to have fName and count = 1
  newFileNode->fileName = malloc(sizeof(char *));
