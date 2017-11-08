@@ -2,6 +2,8 @@
 Daniel Hug dhug@albany.edu: Leader
 Alana Ruth Aruth@albany.edu : Recorder
 Jessica Kanczura jKanczura@albany.edu : Monitor
+
+Contains functions to browse directories or files, also helper functions
 */
 
 #include <stdio.h>
@@ -18,7 +20,6 @@ Jessica Kanczura jKanczura@albany.edu : Monitor
 void push(char *wd, char *fName);
 void changeFileName(char *fName);
 void append(char *s, char c);
-
 
 //Function to browse through directories one at a time, checking for subdirectories with recursion
 void browseDirectories(char* directoryName){
@@ -37,12 +38,17 @@ void browseDirectories(char* directoryName){
   //Loop through all files and subdirectories in the directory
   while((dentry = readdir(dir)) != NULL){
 
-    //If there is no file extension, it is a directory (so call this method recursively)
-    if (strchr(dentry->d_name, '.') == NULL)
+
+    //If it is a directory (not named . or ..)
+    if (strchr(dentry->d_name, '.') == NULL && strcmp(dentry->d_name, ".") != 0  && strcmp(dentry->d_name, "..") != 0){
+      printf("Directory: %s\n", dentry->d_name);
       browseDirectories(dentry->d_name);
-    //Otherwise, call browseFile
-    else
+    }
+    //Otherwise, if it is not names . or .., call browseFile
+    else if (strcmp(dentry->d_name, ".") != 0 && strcmp(dentry->d_name, "..") != 0){
+      printf("File: %s\n", dentry->d_name);
       browseFile(dentry->d_name);
+    }
   }
 
   //Close the directory
@@ -52,7 +58,7 @@ void browseDirectories(char* directoryName){
 //Function to browse through a file by separators (any non numerical/alphabetical char)
 void browseFile(char* fileName){
   //Declare a FILE pointer variable
-  FILE *fp;
+ FILE *fp;
 
   //If given file cannot be opened, print error message and stop
   if((fp = fopen(fileName, "a+"))== NULL){
@@ -60,7 +66,7 @@ void browseFile(char* fileName){
     return;
   }
 
- //Change the file name (only does if needed)
+  //Change the file name (only does if needed)
   changeFileName(fileName);
 
   //Add a space to the end of the file, then rewind
@@ -72,7 +78,10 @@ void browseFile(char* fileName){
   //Declare int variables to represent each char in file
   int c;
   //Declare char pointer to represent each word
-  char *w = malloc(sizeof(char *));
+  char *w;
+  //If malloc fails, stop
+  if((w = checkMalloc(sizeof(char *)*40)) == NULL)
+    return;
   //Declare a conditional int, TRUE if within word of alphanumeric, FALSE otherwise
   int inWord = FALSE;
 
@@ -88,109 +97,155 @@ void browseFile(char* fileName){
     else{
       //If word just ended
       if (inWord){
-        printf("%s\n", w);
+        printf("---Word: %s\n", w);
         //Reset inWord to be false
-        inWord = FALSE;
+ inWord = FALSE;
 
         //Push the word to the linked list with the fileName
         push(w, fileName);
+        strcpy(w, "");
       }
-      strcpy(w, "");
     }
   }
 
   //Close the file
+  printf("Closing file: %s\n", fileName);
   fclose(fp);
 }
-/*
-Function to push the word to the linked list with the given fileName
 
-If the list is null
-  add the word, with given fileName and count = 1
-
--------------------------------------------
-changeFileName
----------------------------------------------
-Otherwise, iterate through nodes
-  Iterate through fileNames
-    if file exists
-      numFileOccurances++ (starts at 0)
-
-if (numFiles > 0)
-  append fileName with numFiles
-
---------------------------------------------
-
-isFile = FALSE;
-
-Iterate through linked list again
-  if word exists
-    iterate through fileNames
-      if file exists
-        count++ and isFile = TRUE
-    if (!isFile)
-      add fileName to end and count = 1
-  else (word does not exist)
-    add word, given fileName, and count = 1 to end
-*/
-
+//Function to push the word to the linked list with the given fileName
 void push(char *wd, char *fName){
 
-  //Set current node to be head
-  pnode_t curr = h;
-  //To hold the new node ---- MAYBE MOVE THIS, NOT ALWAYS USED
-  pnode_t newNode = malloc(sizeof(pnode_t));
-  //To hold the new file node ---- THIS TOO
-  pfile_t newFileNode = malloc(sizeof(pfile_t));
   //If the list is empty
-  if (curr == NULL){
-    //Add the word
-    newNode->word = malloc(sizeof(char *));
+  if (h == NULL){
+    printf("----Beginning of list\n");
+  //Declare newNode pointer and newFileNode pointer and check malloc
+    pnode_t newNode;
+    pfile_t newFileNode;
+    if((newNode = checkMalloc(sizeof(pnode_t))) == NULL)
+      return;
+    if((newFileNode = checkMalloc(sizeof(pfile_t))) == NULL)
+      return;
+
+    //Initialize the newNode to have the word
+    newNode->word = malloc(sizeof(char *)*strlen(wd));
     strcpy(newNode->word, wd);
     newNode->next = NULL;
 
-    //Add the file to the beginning of this word's file list with count = 1
-    newFileNode->fileName = malloc(sizeof(char *));
+    //Initialize the newFileNode to have fName and count = 1
+    newFileNode->fileName = malloc(sizeof(char *)*strlen(fName));
     strcpy(newFileNode->fileName, fName);
     newFileNode->count = 1;
     newFileNode->nextFile = NULL;
-    newNode->firstFile = newFileNode; //Maybe this works?
+    newNode->firstFile = newFileNode;
+
+    //Set h = newNode
+   h = newNode;
+
+    printf("-----Head is now: %s\n", h->word);
+
+    //Stop
     return;
   }
 
   //If the list is not empty
+  printf("----Not beginning\n");
+
+  //Set current node to be head
+  pnode_t curr = h;
 
   //Declare current file node
   pfile_t currFile;
-  //Declare boolean isFile for whether or not the file is already in the word's list
-  int isFile = FALSE;
 
   //Iterate through the nodes
   while (curr != NULL){
 
     //If the word exists
-    if(strcmp(curr->word, wd) == 0){
+if(strcmp(curr->word, wd) == 0){
 
       //Iterate through the fileNames in the nodes
       currFile = curr->firstFile;
       while (currFile != NULL){
 
-        //If the file exists, set isFile to TRUE
-        if(strcmp(currFile->fileName, fName) == 0)
-          isFile = TRUE;
+        //If the file exists, increment its count and stop
+        if(strcmp(currFile->fileName, fName) == 0){
+          currFile->count++;
+          return;
+        }
 
         //Go to the next file
         currFile = currFile->nextFile;
       }
 
+      //If the file does not exist, add it to the end, set its count = 1, and stop
+      //Declare newFileNode pointer and check malloc
+      pfile_t newFileNode;
+      if((newFileNode = checkMalloc(sizeof(pfile_t))) == NULL)
+        return;
+
+      //Initialize the newFileNode to have fName and count = 1
+      newFileNode->fileName = malloc(sizeof(char *));
+      strcpy(newFileNode->fileName, fName);
+      newFileNode->count = 1;
+      newFileNode->nextFile = NULL;
+
+      //Set the end file to be the newFileNode
+      currFile = newFileNode;
+
+      //Stop
+      return;
     }
 
     //Go to the next node
     curr = curr->next;
   }
 
-}
+  //If the word doesn't exist through the entire list
 
+      //Initialize the newFileNode to have fName and count = 1
+ newFileNode->fileName = malloc(sizeof(char *));
+      strcpy(newFileNode->fileName, fName);
+      newFileNode->count = 1;
+      newFileNode->nextFile = NULL;
+
+      //Set the end file to be the newFileNode
+      currFile = newFileNode;
+
+      //Stop
+      return;
+    }
+
+    //Go to the next node
+    curr = curr->next;
+  }
+
+  //If the word doesn't exist through the entire list
+
+  //Declare newNode pointer and newFileNode pointer and check malloc
+  pnode_t newNode;
+  pfile_t newFileNode;
+  if((newNode = checkMalloc(sizeof(pnode_t))) == NULL)
+ return;
+  if((newFileNode = checkMalloc(sizeof(pfile_t))) == NULL)
+    return;
+
+  //Initialize the newNode to have the word
+  newNode->word = malloc(sizeof(char *));
+  strcpy(newNode->word, wd);
+  newNode->next = NULL;
+
+  //Initialize the newFileNode to have fName and count = 1
+  newFileNode->fileName = malloc(sizeof(char *));
+  strcpy(newFileNode->fileName, fName);
+  newFileNode->count = 1;
+  newFileNode->nextFile = NULL;
+  newNode->firstFile = newFileNode;
+
+  //Set the end node to the newNode
+  curr = newNode;
+
+  //Stop
+  return;
 
 //If the given file name already exists in the list, append an appropriate number to the end of the file name
 void changeFileName(char *fName){
@@ -210,7 +265,7 @@ void changeFileName(char *fName){
     currFile = curr->firstFile;
     while (currFile != NULL){
       //If the file name exists, increment numFile counter
-      if (strcmp(currFile->fileName, fName) == 0)
+ if (strcmp(currFile->fileName, fName) == 0)
         numFiles++;
 
       //Go to the next file
@@ -221,10 +276,35 @@ void changeFileName(char *fName){
   }
 
   //If the file already exists, append its number to the name
-  if(numFiles > 0)
+  if(numFiles > 0){
     append(fName,(numFiles + '0'));
-
+    printf("File name changed to: %s\n", fName);
+  }
+  else
+    printf("File name not changed.\n");
 }
+
+//Wrapper function for malloc checking
+void *checkMalloc(size_t numBytes){
+
+  //Allocate memory for the buffer
+  void *buffer = malloc(numBytes);
+
+  //If malloc fails, print error
+  if (buffer == NULL)
+    fprintf(stderr, "Error: Memory allocation error.\n");
+
+  return buffer;
+}
+
+//Wrapper function for free checking
+void freeMem(void *p){
+
+  //Free the pointer and set it to null
+  free(p);
+  p = NULL;
+}
+
 
 ////////////////////////////////////////////
 //Taken from https://stackoverflow.com/questions/12939370/c-appending-char-to-char
@@ -235,3 +315,5 @@ void append(char *s, char c){
   s[len] = c;
   s[len+1] = '\0';
 }
+
+
