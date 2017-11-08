@@ -80,7 +80,7 @@ void browseFile(char* fileName){
   //Declare char pointer to represent each word
   char *w;
   //If malloc fails, stop
-  if((w = checkMalloc(sizeof(char *)*40)) == NULL)
+  if((w = checkMalloc(sizeof(char *))) == NULL)
     return;
   //Declare a conditional int, TRUE if within word of alphanumeric, FALSE otherwise
   int inWord = FALSE;
