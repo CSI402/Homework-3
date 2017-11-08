@@ -140,7 +140,7 @@ void push(char *wd, char *fName){
     newNode->firstFile = newFileNode;
 
     //Set h = newNode
-   h = newNode;
+    h = newNode;
 
     printf("-----Head is now: %s\n", h->word);
 
@@ -160,8 +160,11 @@ void push(char *wd, char *fName){
   //Iterate through the nodes
   while (curr != NULL){
 
+     printf("...%s...", curr->word);
+    
     //If the word exists
-if(strcmp(curr->word, wd) == 0){
+    if(strcmp(curr->word, wd) == 0){
+      printf("\nWord exists: %s\n", wd);
 
       //Iterate through the fileNames in the nodes
       currFile = curr->firstFile;
@@ -169,6 +172,7 @@ if(strcmp(curr->word, wd) == 0){
 
         //If the file exists, increment its count and stop
         if(strcmp(currFile->fileName, fName) == 0){
+          printf("File exists: %s\n", fName);
           currFile->count++;
           return;
         }
@@ -179,6 +183,7 @@ if(strcmp(curr->word, wd) == 0){
 
       //If the file does not exist, add it to the end, set its count = 1, and stop
       //Declare newFileNode pointer and check malloc
+      printf("File does not exist yet: %s\n", fName);
       pfile_t newFileNode;
       if((newFileNode = checkMalloc(sizeof(pfile_t))) == NULL)
         return;
@@ -201,6 +206,7 @@ if(strcmp(curr->word, wd) == 0){
   }
 
   //If the word doesn't exist through the entire list
+  printf("\nWord does not exist yet: %s\n", wd);
   
    //Declare newNode pointer and newFileNode pointer and check malloc
   pnode_t newNode;
@@ -222,8 +228,14 @@ if(strcmp(curr->word, wd) == 0){
   newFileNode->nextFile = NULL;
   newNode->firstFile = newFileNode;
 
+  // trial node to run through the linked list again
+  pnode_t trial = h;
+  while (trial->next != NULL){
+    trial = trial->next;
+  }
+
   //Set the end node to the newNode
-  curr = newNode;
+  trial->next = newNode;
 
   //Stop
   return;
