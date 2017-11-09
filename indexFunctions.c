@@ -90,7 +90,7 @@ Contains function that creates the index
       fprintf(fp,"%s\n", h->word);
       currFile = *h->firstFile;
 
-      while(currFile != NULL){
+      while(currFile.fileName != NULL){
         fprintf(fp, "%s %d\n", currFile.fileName, currFile.count);
 
         currFile = *currFile.nextFile;
