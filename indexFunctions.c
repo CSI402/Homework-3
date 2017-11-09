@@ -71,7 +71,7 @@ Contains function that creates the index
     for(x = h->firstFile; x->nextFile != NULL; x = x->nextFile){
       for(y = x->nextFile; y->nextFile != NULL; y = y->nextFile){
         if(x->count < y->count){
-          fileSwap(x->firstFile, y->nextFile);
+          fileSwap(x, y->nextFile);
           
         }
       }
