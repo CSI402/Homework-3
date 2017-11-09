@@ -16,11 +16,11 @@ Contains function that creates the index
 #include "externs.h"
 
 //Function to alphabetize the words in all the files, then sort by count per file
-//Right now, just prints info to the given fileName
-void indexGenerator(char *fileName){
+  //Right now, just prints info to the given fileName
+  void indexGenerator(char *fileName){
   printf("Calling index generator!\n");
 
-  
+  //Declare a FILE pointer variable
   FILE *fp;
 
   //If given file cannot be opened, print error message and stop
@@ -28,7 +28,7 @@ void indexGenerator(char *fileName){
     fprintf(stderr, "Error: File %s cannot be opened.\n", fileName);
     return;
   }
-  
+
 
   //If the list is empty, print so
   if (h == NULL){
@@ -42,17 +42,19 @@ void indexGenerator(char *fileName){
   while (h != NULL){
     printf("h is not null\n");
 
-
-    printf("%s---", h->word);
+    fprintf(fp, "<list>\n");
+    fprintf(fp,"%s\n", h->word);
     currFile = h->firstFile;
 
     while(currFile != NULL){
-      printf("%s---%d---", currFile->fileName, currFile->count);
+      fprintf(fp, "%s %d\n", currFile->fileName, currFile->count);
 
       currFile = currFile->nextFile;
     }
-
+    fprintf(fp, "</list>\n");
     printf("\n");
     h = h->next;
   }
 }
+
+
