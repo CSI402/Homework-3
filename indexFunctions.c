@@ -15,21 +15,20 @@ Contains function that creates the index
 #include "struct_def.h"
 #include "externs.h"
 
-//Function to alphabetize the words in all the files, then sort by count per f\
-ile
+//Function to alphabetize the words in all the files, then sort by count per file
 //Right now, just prints info to the given fileName
 void indexGenerator(char *fileName){
   printf("Calling index generator!\n");
 
-  /*Declare a FILE pointer variable
+  
   FILE *fp;
 
-  If given file cannot be opened, print error message and stop
+  //If given file cannot be opened, print error message and stop
   if((fp = fopen(fileName, "w"))== NULL){
     fprintf(stderr, "Error: File %s cannot be opened.\n", fileName);
     return;
   }
-  */
+  
 
   //If the list is empty, print so
   if (h == NULL){
