@@ -76,7 +76,7 @@ Contains function that creates the index
         }
       }
     }
-    h->next;
+    h = h->next;
   }
 
 
