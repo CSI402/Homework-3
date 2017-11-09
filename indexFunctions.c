@@ -93,7 +93,7 @@ Contains function that creates the index
       while(currFile != NULL){
         fprintf(fp, "%s %d\n", currFile.fileName, currFile.count);
 
-        currFile = currFile.nextFile;
+        currFile = *currFile.nextFile;
       }
       fprintf(fp, "</list>\n");
       printf("\n");
