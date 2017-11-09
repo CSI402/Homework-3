@@ -16,10 +16,14 @@ Contains function that creates the index
 #include "externs.h"
 
 //Local function prototypes
-void sortFiles();
+void insertionSort(/*pnode_t *head_ref*/);
+void sortedInsert(pnode_t *head_ref, pnode_t newNode);
+
+/*void sortFiles();
 void sortNodes();
 int areFilesSorted();
 int areNodesSorted();
+*/
 
 //Function to alphabetize the words in all the files, then sort by count per file
 //Right now, just prints info to the given fileName
@@ -42,8 +46,12 @@ void indexGenerator(char *fileName){
  //If the list is not empty, sort file lists by counts then nodes by words
   //  while(!areFilesSorted())
   //sortFiles();
-  while(!areNodesSorted())
-    sortNodes();
+ // while(!areNodesSorted())
+   // sortNodes();
+  
+  
+  //Sort the list
+  insertionSort(/*&h*/);
 
   //change all printf to be fprintf to fp at the end
   //Print the entire sorted list to the output file
@@ -65,6 +73,58 @@ void indexGenerator(char *fileName){
   }
 }
 
+//Function to sort the linked list with insertion sort
+void insertionSort(/*pnode_t *head_ref*/){
+
+  //Initialize sorted linked list
+  pnode_t sorted = NULL;
+  //Current pointer
+  pnode_t curr = h;
+
+  //Loop through the nodes
+  while(curr != NULL){
+
+    printf("---Inserting %s...\n", curr->word);
+
+    //Insert current in sorted linked list
+    sortedInsert(&sorted, temp);
+
+    curr = curr->next;
+  }
+
+  //Update head to point to sorted list
+  h = sorted;
+}
+
+//Function to insert a new node into the list (similar to push)
+void sortedInsert(pnode_t *newHead, pnode_t newNode){
+
+  //If the head is null or the new word is less than the head's
+  if(*newHead == NULL || (strcmp((*newHead)->word, newNode->word) > 0)){
+    printf("---Inserting %s at head.\n", newNode->word);
+
+    //Inset the node at the end
+    newNode->next = *newHead;
+    *newHead = newNode;
+  }
+  else{
+    printf("---Inserting %s in middle.\n", newNode->word);
+
+    //Locate the node before the point of insertion
+    pnode_t curr = *newHead;
+    while(curr->next != NULL && (strcmp(curr->next->word, newNode->word) < 0))
+      curr = curr->next;
+
+    //Insert the node at the right spot
+    newNode->next = curr->next;
+    curr->next = newNode;
+
+  }
+}
+
+
+
+/*
 //Function to sort the files
 void sortFiles(){
 
@@ -146,3 +206,4 @@ int areNodesSorted(){
   //Otherwise, return true
   return TRUE;
 }
+*/
