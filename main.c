@@ -18,10 +18,8 @@ int main(int argc, char *argv[]){
 
   //Delcare char array to hold directory name
   char directoryName[1024];
-
-  //Malloc memory for the head of the linked list
-  if((h = checkMalloc(sizeof(pnode_t))) == NULL)
-    return 0;
+  //Making sure to have a '\0' at the end of the directory name
+  memset(directoryName, '\0', 1024);
 
   //Initialize the head of the linked list to be null
   h = NULL;
@@ -84,8 +82,24 @@ int main(int argc, char *argv[]){
     indexGenerator(argv[1]);
   }
 
-  //Free the memory of h
-  freeMem(h);
+  //Free the memory of h (all the nodes and inner files)
+  pnode_t curr = h;
+  pfile_t currFile;
+
+  while(curr != NULL) {
+    free(h->word);
+
+    currFile = curr->firstFile;
+    while(currFile != NULL){
+      free(curr->firstFile->fileName);
+
+      currFile = curr->firstFile->nextFile;
+      free(curr->firstFile);
+    }
+    curr = h->next;
+    free(h);
+  }
+
 
   return 0;
 }
