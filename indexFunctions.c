@@ -60,7 +60,7 @@ Contains function that creates the index
     for(i = h; i->next != NULL; i = i->next){
       for(j = i->next; j->next != NULL; j = j->next){
         if(strcmp(i->word, j->word) > 0){
-          swap(i->word, j->word);
+          swap(i, j);
         }
       }
     }
