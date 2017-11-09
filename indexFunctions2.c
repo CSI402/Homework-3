@@ -71,8 +71,6 @@ void sortFiles(){
   //Declare local pointer to each node and file and count
   // pnode_t curr = h;
   //pfile_t currFile;
-
-
 }
 
 //Function to sort the nodes
@@ -116,49 +114,7 @@ int areFilesSorted(){
     currFile = curr->firstFile;
 
     while(currFile->nextFile != NULL){
-
-      //If there is an instance where the next value is greater than the current
-      //Loop through nodes
-      while(curr->next != NULL){
-        //If there is an istance where the next word is less than the current
-    if(strcmp(curr->word, curr->next->word) > 0){
-
-      //Copy word of curr to tempWord
-      tempWord = malloc(sizeof(char)*(strlen(curr->word) + 1));
-      strcpy(tempWord, curr->word);
-      tempWord[strlen(curr->word)] = '\0';
-
-      //Copy word of curr->next to curr word
-      curr->word = malloc(sizeof(char)*(strlen(curr->next->word) + 1));
-      strcpy(curr->word, curr->next->word);
-      curr->word[strlen(curr->next->word)] = '\0';
-
-      //Copy the word of tempWord to curr->next word
-      curr->next->word = malloc(sizeof(char)*(strlen(tempWord) + 1));
-      strcpy(curr->next->word, tempWord);
-      curr->next->word[strlen(tempWord)] = '\0';
-
-      //Copy the firstFile of curr to tempFile
-      tempFile = malloc(sizeof(file_t));
-      tempFile = curr->firstFile;
-
-      //Copy the firstFile of curr->next to curr firstFile
-  tempFile = malloc(sizeof(file_t));
-      tempFile = curr->firstFile;
-
-      //Copy the firstFile of curr->next to curr firstFile
-      curr->firstFile = curr->next->firstFile;
-
-      //Copy the firstFile of tempFile to curr->next firstFile
-      curr->next->firstFile = tempFile;
-
-    }
-
-    free(tempWord);
-    free(tempFile);
-    curr = curr->next;
-  }
-if(currFile->nextFile->count > currFile->count)
+      if(currFile->nextFile->count > currFile->count)
         return FALSE; //Immediately return that the files are not sorted
 
       currFile = currFile->nextFile;
