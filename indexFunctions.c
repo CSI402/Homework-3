@@ -88,7 +88,7 @@ Contains function that creates the index
 
       fprintf(fp, "<list>\n");
       fprintf(fp,"%s\n", h->word);
-      currFile = h->firstFile;
+      currFile = *h->firstFile;
 
       while(currFile != NULL){
         fprintf(fp, "%s %d\n", currFile.fileName, currFile.count);
