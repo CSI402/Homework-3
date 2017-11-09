@@ -11,5 +11,5 @@ main.o: main.c
 %.o: %.c
         $(CC) $(CFLAGS) -c $<
 clean:
-        rm indexer $(OBJECTS)
+        rm indexer main.o indexFunctions.o browseFunctions.o
 
