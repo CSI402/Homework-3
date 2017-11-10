@@ -16,14 +16,10 @@ Contains function that creates the index
 #include "externs.h"
 
 //Local function prototypes
-void insertionSort(/*pnode_t *head_ref*/);
+void insertionSort();
 void sortedInsert(pnode_t *head_ref, pnode_t newNode);
-
-/*void sortFiles();
-void sortNodes();
-int areFilesSorted();
-int areNodesSorted();
-*/
+void insertionSortFiles(pfile_t headFile);
+void sortedInsertFiles(pfile_t *headFile, pfile_t newFile);
 
 //Function to alphabetize the words in all the files, then sort by count per file
 //Right now, just prints info to the given fileName
@@ -43,53 +39,57 @@ void indexGenerator(char *fileName){
     fprintf(stderr, "The list is empty.\n");
     return;
   }
- //If the list is not empty, sort file lists by counts then nodes by words
-  //  while(!areFilesSorted())
-  //sortFiles();
- // while(!areNodesSorted())
-   // sortNodes();
-  
-  
-  //Sort the list
-  insertionSort(/*&h*/);
+
+  //Sort the nodes
+  insertionSort();
+
+  //Sort the files
+  pnode_t curr = h;
+  pfile_t currFile;
+  while(curr != NULL){
+    currFile = curr->firstFile;
+    insertionSortFiles(currFile);
+    free(currFile);
+    curr = curr->next;
+  }
 
   //change all printf to be fprintf to fp at the end
   //Print the entire sorted list to the output file
-  pfile_t currFile;
+  pfile_t currFile2;
 
   while (h != NULL){
 
     printf("<list> %s\n", h->word);
+  currFile2 = h->firstFile;
 
-    currFile = h->firstFile;
+    while(currFile2 != NULL){
+      printf("%s %d ", currFile2->fileName, currFile2->count);
 
-    while(currFile != NULL){
-      printf("%s %d ", currFile->fileName, currFile->count);
-
-      currFile = currFile->nextFile;
+      currFile2 = currFile2->nextFile;
     }
-  printf("\n</list>\n");
+
+    printf("\n</list>\n");
     h = h->next;
   }
 }
 
 //Function to sort the linked list with insertion sort
-void insertionSort(/*pnode_t *head_ref*/){
+void insertionSort(){
 
   //Initialize sorted linked list
   pnode_t sorted = NULL;
   //Current pointer
   pnode_t curr = h;
-
   //Loop through the nodes
   while(curr != NULL){
 
-    printf("---Inserting %s...\n", curr->word);
+    pnode_t next = curr->next;
 
     //Insert current in sorted linked list
-    sortedInsert(&sorted, temp);
+    //insertionSortFiles(&(curr->firstFile));
+    sortedInsert(&sorted, curr);
 
-    curr = curr->next;
+    curr = next;
   }
 
   //Update head to point to sorted list
@@ -100,15 +100,13 @@ void insertionSort(/*pnode_t *head_ref*/){
 void sortedInsert(pnode_t *newHead, pnode_t newNode){
 
   //If the head is null or the new word is less than the head's
-  if(*newHead == NULL || (strcmp((*newHead)->word, newNode->word) > 0)){
-    printf("---Inserting %s at head.\n", newNode->word);
+if(*newHead == NULL || (strcmp((*newHead)->word, newNode->word) > 0)){
 
-    //Inset the node at the end
+    //Insert the node at the beginning
     newNode->next = *newHead;
     *newHead = newNode;
   }
   else{
-    printf("---Inserting %s in middle.\n", newNode->word);
 
     //Locate the node before the point of insertion
     pnode_t curr = *newHead;
@@ -118,92 +116,49 @@ void sortedInsert(pnode_t *newHead, pnode_t newNode){
     //Insert the node at the right spot
     newNode->next = curr->next;
     curr->next = newNode;
-
   }
 }
 
+//Function to sort the files within each node
+void insertionSortFiles(pfile_t headFile){
+  //Declare sorted and current file pointers
+  pfile_t sortedFiles;
+  pfile_t currFile = headFile;
 
+  //Loop through nodes
+  while(currFile != NULL){
 
-/*
-//Function to sort the files
-void sortFiles(){
+    pfile_t next = currFile->nextFile;
 
-  //Declare local pointer to each node and file and count
-  // pnode_t curr = h;
-  //pfile_t currFile;
-}
+    //Insert currFile in sorted file list
+    sortedInsertFiles(&sortedFiles, currFile);
 
-//Function to sort the nodes
-void sortNodes(){
-
-  //Declare local pointer to each node and word and file
-  pnode_t curr = h;
-  pnode_t tempNode = malloc(sizeof(node_t));
- //Loop through nodes
-  while(curr->next != NULL){
-    //If there is an istance where the next word is less than the current, swap and return
-    if(strcmp(curr->word, curr->next->word) > 0){
-
-      //Copy curr node to tempNode
-      tempNode = curr;
-
-      //Copy curr->next to curr
-      curr = curr->next;
-
-      //Copy tempNode to curr->next
-      curr->next = tempNode;
-
-      //free(tempNode);
-
-      return;
-    }
-    curr = curr->next;
+    //Advance to next file
+    currFile = next;
   }
+
+  //Update head to sorted list
+  headFile = sortedFiles;
 }
 
-//Function returns a boolean if the files are sorted or not
-int areFilesSorted(){
+//Function to insert the file into the correct order in a list
+void sortedInsertFiles(pfile_t *headFile, pfile_t newFile){
 
-  //Declare local pointers to each node and file
-  pnode_t curr = h;
+  //Declare current file pointer
   pfile_t currFile;
 
-  //Loop through nodes
-  while(curr != NULL){
-
-    currFile = curr->firstFile;
-
-    while(currFile->nextFile != NULL){
-      if(currFile->nextFile->count > currFile->count)
-        return FALSE; //Immediately return that the files are not sorted
-
+  //Insert at head
+  if(*headFile == NULL || (*headFile)->count >= newFile->count){
+    newFile->nextFile = *headFile;
+    *headFile = newFile;
+  }
+  //Insert in correct spot
+  else{
+    currFile = *headFile;
+    while (currFile->nextFile != NULL && currFile->nextFile->count < newFile->count)
       currFile = currFile->nextFile;
-    }
 
-    curr = curr->next;
+    newFile->nextFile = currFile->nextFile;
+    currFile->nextFile = newFile;
   }
-
-   //Otherwise, return true;
-  return TRUE;
 }
-
-//Function returns a boolean if the nodse are sorted or not
-int areNodesSorted(){
-
-  //Declare local pointer to each node
-  pnode_t curr = h;
-
-  //Loop through nodes
-  while(curr->next != NULL){
-
-    //If there is an istance where the next word is less than the current
-    if(strcmp(curr->word, curr->next->word) > 0)
-      return FALSE;
-
-    curr = curr->next;
-  }
-
-  //Otherwise, return true
-  return TRUE;
-}
-*/
